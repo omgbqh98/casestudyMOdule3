@@ -125,7 +125,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         }
 
         .demo-1 .large-header {
-            background-image: url('../image/banner.jpg');
+            background-image: url('../hinhnendangnhap.jpg');
             background-position: center bottom;
         }
 

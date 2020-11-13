@@ -1,7 +1,72 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <style>
+        .qty .count {
+            color: #000;
+            display: inline-block;
+            vertical-align: top;
+            font-size: 25px;
+            font-weight: 700;
+            line-height: 30px;
+            padding: 0 2px
+        ;min-width: 35px;
+            text-align: center;
+        }
+        .qty .plus {
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: top;
+            color: white;
+            width: 30px;
+            height: 30px;
+            font: 30px/1 Arial,sans-serif;
+            text-align: center;
+            border-radius: 50%;
+        }
+        .qty .minus {
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: top;
+            color: white;
+            width: 30px;
+            height: 30px;
+            font: 30px/1 Arial,sans-serif;
+            text-align: center;
+            border-radius: 50%;
+            background-clip: padding-box;
+        }
+        div {
+            text-align: center;
+        }
+        .minus:hover{
+            background-color: #717fe0 !important;
+        }
+        .plus:hover{
+            background-color: #717fe0 !important;
+        }
+        /*Prevent text selection*/
+        span{
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        input{
+            border: 0;
+            width: 2%;
+        }
+        nput::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input:disabled{
+            background-color:white;
+        }
+
+
+
         .main{
             margin: 5px;
             background-color: black;
@@ -135,6 +200,15 @@
             /*position: fixed;*/
             /*    width: 100%;*/
         }
+        #comment {
+            border: 1px #243024;
+            width: 700px;
+            height: 200px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            text-align: left;
+        }
+
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -172,7 +246,6 @@
         Login Admin
     </button>
 
-    <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -221,17 +294,17 @@
 </nav>
 
 <table>
+
     <tr>
-        <td>Name: </td>
-<%--        <td>${requestScope["customer"].getName()}</td>--%>
-    </tr>
-    <tr>
-<%--        <video controls>--%>
-<%--            <source src="Downloads\video.mp4" type="video/mp4" />--%>
-<%--        </video>--%>
+
 <%--    <iframe width="560" height="315" src="https://www.youtube.com/embed/emqQcsu1nqo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>--%>
         <iframe width="100%" height="600px" src="https://www.youtube.com/embed/${requestScope["video"].getLink()}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <h1>${requestScope["video"].getTitle()}</h1>
+
+    <div class="qty mt-5">
+        <input type="number" class="count" name="qty" value="8">
+        <span class="plus bg-dark">✌ </span>
+    </div>
 
         <td>des: </td>
         <td>${requestScope["video"].getDes()}</td>
@@ -240,10 +313,52 @@
         <td>id User: </td>
         <td>${requestScope["video"].getIdUser()}</td>
     </tr>
-    <tr>
-<%--        <td>Image: </td>--%>
-<%--        <td>${requestScope["customer"].getImage()}</td>--%>
-    </tr>
 </table>
+
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<script>
+    $(document).ready(function(){
+        $('.count').prop('disabled', true);
+        $(document).on('click','.plus',function(){
+            $('.count').val(parseInt($('.count').val()) + 1 );
+        });
+        $(document).on('click','.minus',function(){
+            $('.count').val(parseInt($('.count').val()) - 1 );
+            if ($('.count').val() == 0) {
+                $('.count').val(1);
+            }
+        });
+    });
+</script>
+<form action="/comment" method="post">
+    <input type="text" class="form-control" name="comment" placeholder="input your comment..." >
+    <br>
+
+    <button type="submit" class="btn btn-outline-secondary" style="text-align: center">comment</button >
+</form>
+
+<div id="comment">
+<c:forEach items='${requestScope["comments"]}' var="commentt">
+    <h5>stranger :</h5>
+        <p><c:out value="${commentt.comment}"/></p>
+
+</c:forEach>
+</div>
+
+<h4>video đề xuất: </h4>
+<hr style="border-color: red" >
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4xLklVAlcUM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/q3Ng-eJV8ow" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/QMbFyGGm-nY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/emqQcsu1nqo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uiuHHq0NaoQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tZQJsZU19q8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/E8xlUAcsXYQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-BC3A5xlfMs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </body>
 </html>

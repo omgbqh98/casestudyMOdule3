@@ -10,13 +10,19 @@
 <html>
 <head>
     <style>
+
+
+
+
+
+
         .main{
             margin: 5px;
             background-color: black;
         }
 
         div.gallery {
-            border: 3px solid cornflowerblue;
+            border: 5px solid cornflowerblue;
         }
 
         div.gallery:hover {
@@ -143,6 +149,9 @@
             /*position: fixed;*/
             /*    width: 100%;*/
         }
+        .nen{
+            margin-top: 60px;
+        }
     </style>
     <title>Home Page</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -164,7 +173,7 @@
             <%--                            <div class="desc"><a href="/video?action=edit&id=${customer.getId()}" class="btn btn-secondary">EDIT</a></div>--%>
 <%--            <td>${requestScope["customer"].getName()}</td>--%>
 
-            <a href="video/personalPage.jsp">
+            <a href="/viewPage">
                 <%
                     User user = (User) session.getAttribute("user");
                     if(user!=null){
@@ -180,9 +189,9 @@
                 }
             %>
         </li>
-        <li class="nav-item active" id="xinchao2">
-            <a href="user/dangnhap.jsp">ADD VIDEO</a>
-        </li>
+<%--        <li class="nav-item active" id="xinchao2">--%>
+<%--            <a href="user/dangnhap.jsp">ADD VIDEO</a>--%>
+<%--        </li>--%>
     </ul>
 
 
@@ -210,7 +219,7 @@
                         <label>Tài khoản</label>
                         <input type="text" class="form-control" name="username" placeholder="account">
                         <label>Mật khẩu</label>
-                        <input type="text" class="form-control" name="pass" placeholder="passwords">
+                        <input type="password" class="form-control" name="pass" placeholder="passwords">
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Đăng nhập</button>
                         </div>
@@ -233,11 +242,35 @@
             </li>
         </ul>
     </div>
-    <form class="form-inline my-2 my-lg-0" action="/video?action=searchByName">
+    <form class="form-inline my-2 my-lg-0" action="/video?action=searchByName" method="post">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searchByName">
         <button type="submit" class="btn btn-outline-secondary">SEARCH</button>
     </form>
 </nav>
+
+<div class="nen">
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100" src="../anhbia.jpg" alt="First slide" style="width: 50% ; height: 300px">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="../anhbia2.jpg" alt="Second slide" style="width: 50% ; height: 300px">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="../hinhbia3.jpg" alt="Third slide" style="width: 50%; height: 300px">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
 <div>
     <div class="container">
         <%--        <p style="margin-top: 50px">SẢN PHẨM <i style="color: red">V&T SHOWROOM</i></p>--%>
@@ -253,12 +286,18 @@
 <%--                <div class="main" >--%>
                     <div class="responsive">
                         <div class="gallery">
-                            <a  target="_blank" href="/video?action=view&id=${video.getIdVideo()}"><img src="${video.getImage()}" width="550" height="550"></a>
+                            <a target="_blank" href="/video?action=view&id=${video.getIdVideo()}"><img src="${video.getImage()}" width="550" height="550"></a>
                             <div class="desc">${video.getTitle()}</div>
 <%--                            <div class="desc">${video.getDes()}</div>--%>
-                            <div class="desc">${video.getIdUser()}</div>
+                            <div  class="desc">ID poster: ${video.getIdUser()}</div>
+                            <div class="desc"><a href="/viewPage?action=viewPage2&id=${video.getIdUser()}" class="btn btn-danger">View Channel</a></div>
+
+                        <%--                            <div class="desc">${user}</div>--%>
 <%--                            <div class="desc"><a href="/video?action=edit&id=${customer.getId()}" class="btn btn-secondary">EDIT</a></div>--%>
 <%--                            <div class="desc"><a href="/video?action=delete&id=${customer.getId()}" class="btn btn-danger">DELETE</a></div>--%>
+
+
+
                         </div>
                     </div>
 <%--                </div>--%>
@@ -281,6 +320,7 @@
 
 <%--    <input type="submit" class="btn btn-success" value="Search By Name">--%>
 <%--</form>--%>
+
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

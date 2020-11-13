@@ -1,5 +1,7 @@
 package servicevideo;
 
+import model.Comment;
+import model.User;
 import model.Video;
 
 import java.sql.*;
@@ -13,10 +15,52 @@ public class VideoServiceImpl implements VideoService {
             " (?, ?, ?,?,?);";
     private static final String SELECT_CUSTOMER_BY_ID = "select id,name,email,address,image from customer where id =?;";
     private static final String SELECT_ALL_CUSTOMER = "select * from customer";
-    private static final String DELETE_CUSTOMER_SQL = "delete from customer where id = ?;";
     private static final String UPDATE_CUSTOMER_SQL = "update users set name = ?,email= ?, address =?,image=? where id = ?;";
     private static final String SEARCH_VIDEO_BY_NAME = "{CALL searchVideoByNameSQL(?)}";
-    private static final String FIND_PAGE ="{CALL find_page(?)}";
+    private static final String FIND_PAGE = "{CALL find_page(?)}";
+    private static final String DELETE_VIDEO_SQL = "delete from video where idVideo = ?;";
+    private static final String UPDATE_VIDEO_SQL = "update video set title = ?,des= ?, image =?,link= ?,idUser=? where idVideo = ?;";
+    private static final String ADD_COMMENT = "INSERT INTO comment(comment) values(?)" ;
+
+    public boolean updaterVideo_new(Video video) throws SQLException {
+        boolean rowUpdate;
+        try(Connection connection=myConnection.getConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL update_Video(?,?,?,?)}")) {
+            callableStatement.setInt(1, video.getIdVideo());
+            callableStatement.setString(2, video.getTitle());
+            callableStatement.setString(3, video.getDes());
+            callableStatement.setString(4, video.getImage());
+//            callableStatement.setString(5, video.getLink());
+//            callableStatement.setInt(6, video.getIdUser());
+            rowUpdate = callableStatement.executeUpdate() > 0;
+        }
+        return rowUpdate;
+    }
+
+//    public boolean updateVideo(Video video) throws SQLException {
+//        boolean rowUpdated;
+//        try (Connection connection = myConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(UPDATE_VIDEO_SQL)) {
+//
+//            statement.setString(1, video.getTitle());
+//            statement.setString(2, video.getDes());
+//            statement.setString(3, video.getImage());
+//            statement.setString(4, video.getLink());
+//            statement.setInt(5, video.getIdUser());
+//            statement.setInt(6,video.getIdVideo());
+//            rowUpdated = statement.executeUpdate() > 0;
+//        }
+//        return rowUpdated;
+//    }
+
+
+    public boolean deleteUser(int id) throws SQLException {
+        boolean rowDeleted;
+        try (Connection connection = myConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_VIDEO_SQL)) {
+            statement.setInt(1, id);
+            rowDeleted = statement.executeUpdate() > 0;
+        }
+        return rowDeleted;
+    }
 
 
     public List<Video> findPage(int idUser) {
@@ -59,6 +103,17 @@ public class VideoServiceImpl implements VideoService {
         return videoByName;
     }
 
+    public void addComment(Comment comment) throws SQLException {
+        try (Connection connection = myConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_COMMENT)) {
+            preparedStatement.setString(1, comment.getComment());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+    }
+
+@Override
     public void insertVideo(Video video) throws SQLException {
 //        System.out.println(INSERT_USERS_SQL);
         // try-with-resource statement will auto close the connection.
@@ -143,20 +198,15 @@ public class VideoServiceImpl implements VideoService {
         }
     }
 
-    @Override
-    public void addCustomer(Video video) throws SQLException {
 
-    }
+
 
     @Override
     public boolean deleteVideo_new(int id) throws SQLException {
         return false;
     }
 
-    @Override
-    public Video getIDVideo(int id) {
-        return null;
-    }
+
 
     public boolean updaterCustomer(Video user) throws SQLException {
         boolean rowUpdate;

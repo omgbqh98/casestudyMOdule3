@@ -143,6 +143,9 @@
             /*position: fixed;*/
             /*    width: 100%;*/
         }
+        .nen{
+            margin-top: 60px;
+        }
     </style>
     <title>your Page</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -235,6 +238,30 @@
         <button type="submit" class="btn btn-outline-secondary">TÌM KIẾM</button>
     </form>
 </nav>
+<div class="nen">
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100" src="../anhbia.jpg" alt="First slide" style="width: 50% ; height: 300px">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="../anhbia2.jpg" alt="Second slide" style="width: 50% ; height: 300px">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="../hinhbia3.jpg" alt="Third slide" style="width: 50%; height: 300px">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+
 <div>
     <div class="container">
         <%--        <p style="margin-top: 50px">SẢN PHẨM <i style="color: red">V&T SHOWROOM</i></p>--%>
@@ -246,16 +273,16 @@
         <div class="row">
             <%--            <center>--%>
             <%--                <table cellpadding="10px">--%>
-            <c:forEach var="video" items="${video}">
+            <c:forEach var="video" items="${videos}">
                 <%--                <div class="main" >--%>
                 <div class="responsive">
                     <div class="gallery">
                         <a  target="_blank" href="/video?action=view&id=${video.getIdVideo()}"><img src="${video.getImage()}" width="550" height="550"></a>
                         <div class="desc">${video.getTitle()}</div>
                             <%--                            <div class="desc">${video.getDes()}</div>--%>
-                        <div class="desc">${video.getIdUser()}</div>
-                        <div class="desc"><a href="/video?action=edit&id=${video.getId()}" class="btn btn-secondary">EDIT</a></div>
-                        <div class="desc"><a href="/video?action=delete&id=${video.getId()}" class="btn btn-danger">DELETE</a></div>
+<%--                        <div class="desc">${video.getIdUser()}</div>--%>
+                        <div class="desc"><a href="/video?action=edit&id=${video.getIdVideo()}" class="btn btn-secondary">EDIT</a></div>
+                        <div class="desc"><a href="/video?action=delete&id=${video.getIdVideo()}" class="btn btn-danger">DELETE</a></div>
                     </div>
                 </div>
                 <%--                </div>--%>
@@ -272,7 +299,6 @@
 <%--        HOTLINE:<a href="$">0999.686.868</a>--%>
 <%--    </div>--%>
 <%--</footer>--%>
-
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

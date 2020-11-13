@@ -1,7 +1,7 @@
 package serviceuser;
 
+import model.Comment;
 import model.User;
-import model.Video;
 import servicevideo.MyConnection;
 
 import java.sql.*;
@@ -11,9 +11,28 @@ import java.util.List;
 public class UserService implements IUser {
     private static final String DELETE_USERS_SQL = "delete from user where idUser = ?;";
     private static final String SEARCH_CUSTOMER_BY_NAME = "{CALL searchUserByNameSQL(?)}";
+    private static final String ALL_COMMENT = "select*from comment";
 
-    private static final String SEARCH ="select*from user where name like '?%'";
+    private static final String SEARCH = "select*from user where name like '?%'";
     MyConnection myConnection = new MyConnection();
+
+    public List<Comment> finAllComment() {
+        List<Comment> comments = new ArrayList<>();
+        try (Connection connection = myConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(ALL_COMMENT)) {
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                String comment = rs.getString("comment");
+                comments.add(new Comment(comment));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comments;
+    }
+
+
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
         try (Connection connection = myConnection.getConnection();
@@ -32,6 +51,7 @@ public class UserService implements IUser {
         }
         return users;
     }
+
     public List<User> searchByName(String searchName) {
         List<User> userByName = new ArrayList<>();
         try {
@@ -44,7 +64,7 @@ public class UserService implements IUser {
                 String name = rs.getString("name");
                 String userName = rs.getString("userName");
                 String pass = rs.getString("pass");
-                userByName.add(new User(id, name,userName, pass));
+                userByName.add(new User(id, name, userName, pass));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -55,8 +75,8 @@ public class UserService implements IUser {
     public boolean deleteUser_new(int id) throws SQLException {
         boolean rowDelete;
         try (Connection connection = myConnection.getConnection();
-             PreparedStatement statement=connection.prepareStatement(DELETE_USERS_SQL)){
-            statement.setInt(1,id);
+             PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL)) {
+            statement.setInt(1, id);
             rowDelete = statement.executeUpdate() > 0;
         }
         return rowDelete;
@@ -67,13 +87,13 @@ public class UserService implements IUser {
         String query = "{CALL get_by_id(?)}";
         try (Connection connection = myConnection.getConnection();
              CallableStatement callableStatement = connection.prepareCall(query)) {
-            callableStatement.setInt(1,id);
+            callableStatement.setInt(1, id);
             ResultSet rs = callableStatement.executeQuery();
             while (rs.next()) {
                 String name = rs.getString("name");
                 String username = rs.getString("username");
                 String pass = rs.getString("pass");
-                user = new User( id,name, username, pass);
+                user = new User(id, name, username, pass);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +106,7 @@ public class UserService implements IUser {
     public boolean addAccount(Object obj) throws SQLException {
         User user = (User) obj;
         try {
-            new MyConnection().thucThiSQL("insert into user(name,userName,pass) values('" +user.getName()+"','"+user.getUserName()+"','"+user.getPass()+"')");
+            new MyConnection().thucThiSQL("insert into user(name,userName,pass) values('" + user.getName() + "','" + user.getUserName() + "','" + user.getPass() + "')");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -96,18 +116,17 @@ public class UserService implements IUser {
     public User getInformationUser(String username) {
 //        User user =new User();
         try {
-            ResultSet rs= new MyConnection().chonDuLieuDTB("select*from user where userName ='"+username+"'");
+            ResultSet rs = new MyConnection().chonDuLieuDTB("select*from user where userName ='" + username + "'");
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
                 String userName = rs.getString(3);
                 String pass = rs.getString(4);
-                return new User(id,name, userName, pass);
+                return new User(id, name, userName, pass);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -127,12 +146,14 @@ public class UserService implements IUser {
         }
         return false;
     }
+
     @Override
-    public boolean checkLogin(String username,String pass) {
+    public boolean checkLogin(String username, String pass) {
         try {
-            ResultSet rs= new MyConnection().chonDuLieuDTB("select*from user where userName ='"+username+"'");
+            ResultSet rs = new MyConnection().chonDuLieuDTB("select*from user where userName ='" + username + "'");
             while (rs.next()) {
                 if (rs.getString(3).equals(username) && rs.getString(4).equals(pass)) {
+                    int id = rs.getInt("idUser");
                     return true;
                 }
             }
@@ -140,6 +161,21 @@ public class UserService implements IUser {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public Integer getIdUser(String username, String pass) {
+        try {
+            ResultSet rs = new MyConnection().chonDuLieuDTB("select*from user where userName ='" + username + "'");
+            while (rs.next()) {
+                if (rs.getString(3).equals(username) && rs.getString(4).equals(pass)) {
+                    int id = rs.getInt("idUser");
+                    return id;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -150,7 +186,7 @@ public class UserService implements IUser {
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
-        System.out.println(new UserService().checkLogin("h","huynh"));
+        System.out.println(new UserService().checkLogin("h", "huynh"));
 
     }
 }

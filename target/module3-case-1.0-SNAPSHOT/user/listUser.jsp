@@ -240,6 +240,7 @@
             </li>
         </ul>
     </div>
+
     <form class="form-inline my-2 my-lg-0" action="/users?action=searchByName">
         <input type="hidden" name="action" value="searchByName">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searchByName">
@@ -248,6 +249,10 @@
 </nav>
 
 <h2>LIST USERS</h2>
+
+<c:if test='${requestScope["message"] != null}'>
+    <span class="message">${requestScope["message"]}</span> <br>
+</c:if>
 
 
 <%--<form action="/users">--%>
@@ -269,7 +274,7 @@
     <c:forEach items='${requestScope["listUser"]}' var="user">
         <tr>
             <td><c:out value="${user.id}"/></td>
-            <td><a href="/viewPage?action=view&id=${user.getId()}">${user.getName()}</a></td>
+            <td><a href="/viewPage?action=viewPage3&id=${user.id}">${user.getName()}</a></td>
             <td><c:out value="${user.userName}"/></td>
             <td><c:out value="${user.pass}"/></td>
             <td>

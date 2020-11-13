@@ -90,7 +90,10 @@ public class ServletUser extends HttpServlet {
 //        System.out.println("ĐÂY LÀ" + searchName);
         RequestDispatcher dispatcher;
         if (searchName.equals("")) {
-            dispatcher = request.getRequestDispatcher("error-404.jsp");
+            request.setAttribute("message","rong");
+             dispatcher = request.getRequestDispatcher("user/searchUser.jsp");
+            dispatcher.forward(request,response);
+
         } else {
             List<User> userByName = userService.searchByName(searchName);
             request.setAttribute("user", userByName);
@@ -103,8 +106,12 @@ public class ServletUser extends HttpServlet {
     private void delete(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, SQLException {
 
         int id = Integer.parseInt(request.getParameter("id"));
-        userService.deleteUser_new(id);
-
+        try {
+            userService.deleteUser_new(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("message","active account");
         List<User> listUser = userService.findAll();
         request.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/listUser.jsp");

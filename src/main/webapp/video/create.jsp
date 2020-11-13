@@ -121,6 +121,9 @@
             /*position: fixed;*/
             /*    width: 100%;*/
         }
+        h1{
+            text-align: center;
+        }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -217,6 +220,7 @@
     </c:if>
 </p>
 
+<p><a href="/viewPage">back to page</a></p>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <div class="container">
 
@@ -233,19 +237,21 @@
         </div>
         <div class="form-group">
             <label for="inputfile">File image input</label>
-            <input type="file" id="inputfile" name="image">
+<%--            <input type="file" id="inputfile" name="image">--%>
 <%--            <p class="form-text">Example block-level help text here.</p>--%>
-<%--            <input type="text" name="image">--%>
+            <input type="text" name="image" id="inputfile">
         </div>
         <div class="form-group">
             <label for="inputfile">File video input</label>
-            <input type="file" id="inputfile1" name="link">
+<%--            <input type="file" id="inputfile1" name="link">--%>
 <%--            <p class="form-text">Example block-level help text here.</p>--%>
-<%--            <input type="text" name="link">--%>
+            <input type="text" name="link" id="inputfile">
         </div>
         <div class="form-group">
             <label for="name"> your ID </label>
-            <input type="text" class="form-control" id="name1" placeholder="Enter Title" name="idUser">
+            <input  type="text" class="form-control" id="name1" value="${idUser}" placeholder="Enter Title" name="idUser" readonly="readonly">
+
+<%--        <p>${idUser}</p>--%>
         </div>
 
         <button type="submit" class="btn btn-secondary">create</button>

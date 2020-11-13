@@ -8,7 +8,17 @@ public class Video {
     private String link;
     private int idUser;
 
+    public Video() {
+    }
+
     public Video(int id, String title, String des, String image, String link, String idUser) {
+    }
+
+    public Video(int idVideo, String title, String des, String image) {
+        this.idVideo = idVideo;
+        this.title = title;
+        this.des = des;
+        this.image = image;
     }
 
     public Video(int idVideo, String title, String des, String image, String link) {
